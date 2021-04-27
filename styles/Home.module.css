@@ -18,7 +18,7 @@
 
 .footer {
   width: 100%;
-  height: 100px;
+  height: 2rem;
   border-top: 1px solid #eaeaea;
   display: flex;
   justify-content: center;
@@ -81,9 +81,9 @@
 }
 
 .card {
-  margin: 1rem;
-  flex-basis: 45%;
-  padding: 1.5rem;
+  margin: 0.2rem;
+  flex-basis: 100%;
+  padding: 0.5rem;
   text-align: left;
   color: inherit;
   text-decoration: none;
@@ -95,19 +95,39 @@
 .card:hover,
 .card:focus,
 .card:active {
-  color: #0070f3;
-  border-color: #0070f3;
+  /* color: #0070f3;
+  border-color: #0070f3; */
+  background-color: aliceblue;
 }
 
-.card h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.5rem;
+.card .cardtitle {
+  margin: 0 0 0 0;
+  font-size: 1.2rem;
+  font-weight: normal;
 }
 
-.card p {
+.card .cardindex {
+  margin: 0 0 0 0;
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+.card .carddetail
+{
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.5;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+  color: #acacac;
+}
+.card .cardate {
+  padding-right: 2rem;
+}
+
+.card .cardhome {
+  color: inherit;
+  text-decoration: none;
+}
+.card .cardhome :hover {
+  opacity: 0.6;
 }
 
 .logo {
@@ -117,6 +137,6 @@
 @media (max-width: 600px) {
   .grid {
     width: 100%;
-    flex-direction: column;
+    /* flex-direction: column; */
   }
 }

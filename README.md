@@ -1,34 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RSSBlog 0.1
 
-## Getting Started
+RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://github.com/volfclub/travellings](https://github.com/volfclub/travellings) 及 [https://front-end-rss.vercel.app/](https://front-end-rss.vercel.app/)
 
-First, run the development server:
+通过RSSBlog将方便地预览不同博客的内容, 而无需进入不同的博客浏览.
 
-```bash
-npm run dev
-# or
-yarn dev
+## 接入规则
+
+### 加入RSSBlog的博客应满足
+
+1. 愿为开放的网络做出贡献(如乐于分享知识经验等)
+2. 没有违法以及影响体验的内容(如侵入式广告等)
+3. 正常更新维护中(国内无法正常访问会被移除)
+4. 网页已有较多内容
+5. 启用https
+
+### 提交issue
+
+如果满足RSSBlog的接入条件, 且期望接入RSSBlog, 需要按照以下格式提交issue:
 ```
+{
+    link: 'https://yourblog.com/rss.xml',
+    author: 'yourname'
+}
+```
+提交的issue将经过人工筛选, 以保证内容干净.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### RSS接力
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+目前还没有定义RSSBlog的接力规则, 所以目前可以您的博客网站中无需有指向RSSBlog的链接.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+后续规划中将会添加RSSBlog的接力规则, 接入的博客将必须添加指向RSSBlog的链接, 具体规则待定义, 还望理解.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+有任何问题或者建议欢迎提issue.
 
-## Learn More
+## 参与贡献
 
-To learn more about Next.js, take a look at the following resources:
+本站目前欢迎任何形式的贡献, 您可以:
+1. 更改样式;
+2. 页面设计;
+3. 重构代码;
+4. 任何其他;
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+在项目后期, 或者项目版本迭代到1.0之后将会控制重构及该版等较大的改动.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### TODOLIST
 
-## Deploy on Vercel
+目前还有一些TODO的功能:
+1. 分类: 时间分类[年, 年月, 等], 内容分类[技术, 杂谈, 生活, 等]
+2. 搜索: 标题搜索和内容搜索
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 任何问题
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+欢迎提issue, 我们会尽量阅读并回复.
