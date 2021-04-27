@@ -20,6 +20,10 @@ function Home({ data }) {
           A Site for Blog RSS.
         </p>
 
+        <a className={styles.normalink} href="https://github.com/caibingcheng/rssblog" title="GitHub" target="_blank" rel="noopener noreffer me">
+          GitHub
+        </a>
+
         <div className={styles.grid}>
           {
             data.map(item => (

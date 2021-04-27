@@ -140,3 +140,9 @@
     /* flex-direction: column; */
   }
 }
+
+.normalink:hover,
+.normalink:focus,
+.normalink:active {
+  color: #0070f3;
+}
