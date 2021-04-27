@@ -5,7 +5,7 @@ const rss = require('../rss/rss')
 
 function Home({ data }) {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="top-header">
       <Head>
         <title>RSSBlog</title>
         <link rel="icon" href="/favicon.ico" />
@@ -19,14 +19,13 @@ function Home({ data }) {
         <p className={styles.description}>
           A Site for Blog RSS.
         </p>
-
-        <a className={styles.normalink} href="https://github.com/caibingcheng/rssblog" title="GitHub" target="_blank" rel="noopener noreffer me">
-          GitHub
-        </a>
+        <p className={styles.updatetime}>
+          Last updated at {data.meta.updatetime}
+        </p>
 
         <div className={styles.grid}>
           {
-            data.map(item => (
+            data.data.map(item => (
               <a href={item.link} className={styles.card}>
                 <span className={styles.cardindex}>{item.index}. &nbsp;&nbsp;</span>
                 <span className={styles.cardtitle}>{item.title}</span>
@@ -41,9 +40,15 @@ function Home({ data }) {
           }
         </div>
 
+        <div className={styles.fixedbox}>
+          <a className={styles.actiongithub} href="https://github.com/caibingcheng/rssblog" title="GitHub" target="_blank" rel="noopener noreffer me"></a>
+          <a className={styles.actiontop} href="#top-header"></a>
+          <a className={styles.actionbottom} href="#bottom-footer"></a>
+        </div>
+
       </main>
 
-      <footer className={styles.footer}>
+      <footer className={styles.footer} id="bottom-footer">
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -82,7 +87,7 @@ export const getStaticProps = async () => {
     ddate = ddate < 10 ? ('0' + ddate) : ('' + ddate)
     each.date = date.getFullYear() + '-' + month + '-' + ddate
   })
-  data.sort(function(d1, d2) {
+  data.sort(function (d1, d2) {
     return d2.timestamp - d1.timestamp
   })
   let i = 1;
@@ -90,6 +95,25 @@ export const getStaticProps = async () => {
     each.index = i;
     i = i + 1;
   })
+
+  let date = new Date()
+  let month = date.getMonth() + 1
+  month = month < 10 ? ('0' + month) : ('' + month)
+  let ddate = date.getDate()
+  ddate = ddate < 10 ? ('0' + ddate) : ('' + ddate)
+  let hour = date.getHours()
+  hour = hour < 10 ? ('0' + hour) : ('' + hour)
+  let minute = date.getMinutes()
+  minute = minute < 10 ? ('0' + minute) : ('' + minute)
+  let second = date.getSeconds()
+  second = second < 10 ? ('0' + second) : ('' + second)
+  let updatetime = date.getFullYear() + '-' + month + '-' + ddate + ' ' + hour + ':' + minute + ':' + second
+  data = {
+    data: data,
+    meta: {
+      updatetime: updatetime
+    }
+  }
 
   return {
     props: {
