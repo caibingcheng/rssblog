@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from '../../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 import Menu from './menu'
 
 const Title = () => (

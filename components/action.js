@@ -1,4 +1,4 @@
-import styles from '../../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 
 const Action = () => (
     <div className={styles.fixedbox}>

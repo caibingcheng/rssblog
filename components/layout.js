@@ -2,7 +2,7 @@ import Header from './header'
 import Title from './title'
 import Action from './action'
 import Footer from './footer'
-import styles from '../../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 
 const Layout = props => (
     <div className={styles.container} id="top-header">
