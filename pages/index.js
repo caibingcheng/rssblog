@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.css'
 import Layout from '../components/layout'
 import rss_parser from '../utils/parser'

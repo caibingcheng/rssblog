@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Layout from '../components/layout'
+import Layout from './layout'
 import rss_parser from '../utils/parser'
 const parser = require('xml2json')
 const rss = require('../rss/rss')
@@ -46,9 +46,9 @@ export const getStaticProps = async () => {
     return {
         props: {
             member
-        }
+        },
+        fallback: false
     }
 }
-
 
 export default Member
