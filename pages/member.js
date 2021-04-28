@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Layout from '../components/layout'
-import rss_parser from './parser'
+import rss_parser from '../utils/parser'
 const parser = require('xml2json')
 const rss = require('../rss/rss')
 
