@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.css'
 import Layout from '../components/layout'
-import rss_parser from '../utils/parser'
+import rss_parser from './parser'
 const parser = require('xml2json')
 const rss = require('../rss/rss')
 
