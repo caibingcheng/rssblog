@@ -6,7 +6,7 @@ const Title = () => (
     <div>
         <h1 className={styles.title}>RSSBlog</h1>
         <p className={styles.description}>A Site for Blog RSS.</p>
-        <Menu />
+        {/* <Menu /> */}
     </div>
 )
 
