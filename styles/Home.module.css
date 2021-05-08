@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.footer div{
+  margin: 0.5rem 0.5rem;
+}
+
 .footer img {
   margin-left: 0.5rem;
 }
