@@ -1,4 +1,4 @@
-# RSSBlog 0.1
+# RSSBlog 0.2
 
 ![RSSBlog](./public/screenshot.png)
 

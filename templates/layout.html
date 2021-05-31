@@ -1,0 +1,15 @@
+{% include "header.html" %}
+<div id="top-header" class="container">
+    <main class="main">
+        {% include "title.html" %}
+        <p class="updatetime">
+            Last updated at {{ data.meta.updatetime }}
+        </p>
+        <p class="updatetime">
+            update policy 0 0,6,8,10,12,14,16,18,20,22 * * * *
+        </p>
+        {% block content %}{% endblock %}
+    </main>
+</div>
+{% include "action.html" %}
+{% include "footer.html" %}
