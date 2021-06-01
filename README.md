@@ -1,6 +1,6 @@
 # RSSBlog 0.2
 
-![RSSBlog](./public/screenshot.png)
+![RSSBlog](./static/screenshot.png)
 
 RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://github.com/volfclub/travellings](https://github.com/volfclub/travellings) 及 [https://front-end-rss.vercel.app/](https://front-end-rss.vercel.app/)
 
