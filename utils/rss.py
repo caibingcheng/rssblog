@@ -18,5 +18,25 @@ rss = [
     {
         'link': 'https://7bxing.com/atom.xml',
         'author': 'qinxs',
+    },
+    {
+        'link': 'https://www.yunyoujun.cn/atom.xml',
+        'author': '云游君的小站',
+    },
+    {
+        'link': 'https://4ark.me/rss.xml',
+        'author': '4Ark',
+    },
+    {
+        'link': 'https://nicksxs.me/atom.xml',
+        'author': 'Nicksxs',
+    },
+    {
+        'link': 'https://blog.ichr.me/atom.xml',
+        'author': 'ChrAlpha',
+    },
+    {
+        'link': 'https://teobler.com/rss.xml',
+        'author': 'Teobler',
     }
 ]
