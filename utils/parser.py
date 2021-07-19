@@ -5,7 +5,9 @@ def parser(ps):
     rl = []
     mb = []
     for r in rss:
+        print('parsing', r['link'])
         rp = feedparser.parse(r['link'])
+        if not rp: continue
         rl = rl + [{'title': et['title'],
                     'link':et['link'],
                     'home':rp['feed']['link'],
