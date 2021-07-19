@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<script>hljs.initHighlightingOnLoad();</script>
+<p></p>
+<p></p>
+<div class="grid">
+    <article>
+        {{ data.about|markdown }}
+    </article>
+</div>
+{% endblock %}

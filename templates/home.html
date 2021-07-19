@@ -5,9 +5,10 @@
     <a href="{{ item.link }}" target="blank" class="card">
         <span class="cardindex">{{ loop.index }}. </span>
         <span class="cardtitle">{{ item.title }}</span>
+        <!-- &nbsp;&nbsp;<i class="fa fa-rss normalink" aria-hidden="true" onclick="javascript:window.open('{{ item.rss }}')"></i> -->
         <div class="carddetail">
             <span class="cardate">{{ item.date }}</span>
-            <span class="cardauthor cardhome" onclick="javascript:window.open('{{ item.home }}')">{{ item.author }}</span>
+            <span class="cardauthor cardhome normalink" onclick="javascript:window.open('{{ item.home }}')">{{ item.author }}</span>
         </div>
     </a>
     {% endfor %}

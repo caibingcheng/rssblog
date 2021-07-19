@@ -1,6 +1,4 @@
-## RSSBlog 0.2
-
-![RSSBlog](./static/screenshot.png)
+## RSSBlog
 
 RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://github.com/volfclub/travellings](https://github.com/volfclub/travellings) 及 [https://front-end-rss.vercel.app/](https://front-end-rss.vercel.app/)
 
@@ -42,23 +40,3 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
 ```fa-inbox```看起来像一个盒子, 比较贴近RSS聚合的定义.
 
 有任何问题或者建议欢迎提[issue](https://github.com/caibingcheng/rssblog/issues).
-
-### 参与贡献
-
-本站目前欢迎任何形式的贡献, 您可以:
-1. 更改样式;
-2. 页面设计;
-3. 重构代码;
-4. 任何其他;
-
-在项目后期, 或者项目版本迭代到1.0之后将会控制重构及该版等较大的改动.
-
-#### TODOLIST
-
-目前还有一些TODO的功能:
-1. 分类: 时间分类[年, 年月, 等], 内容分类[技术, 杂谈, 生活, 等]
-2. 搜索: 标题搜索和内容搜索
-
-### 任何问题
-
-欢迎提[issue](https://github.com/caibingcheng/rssblog/issues), 我们会尽量阅读并回复.

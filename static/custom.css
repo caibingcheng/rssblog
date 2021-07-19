@@ -57,7 +57,7 @@ a {
 }
 
 .title a {
-  color: #0070f3;
+  color: #000000;
   text-decoration: none;
 }
 
@@ -70,7 +70,7 @@ a {
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 .title,
@@ -79,7 +79,7 @@ a {
 }
 
 .description {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .updatetime {
@@ -117,6 +117,13 @@ a {
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+article {
+  text-align: left;
+}
+article a {
+  color: #250feb;
 }
 
 .membercard {
@@ -180,12 +187,10 @@ a {
 }
 
 .normalink {
-  color: #0030f3;
+  color: #000000;
 }
 
-.normalink:hover,
-.normalink:focus,
-.normalink:active {
+.normalink:hover {
   color: #0070f3;
   cursor: pointer;
 }
