@@ -1,2 +1,3 @@
 Flask==1.1.2
 feedparser
+PyRSS2Gen

@@ -2,7 +2,13 @@
 {% block content %}
 <div class="grid">
     {% for item in data.member %}
-    <a href="{{ item.home }}" target="blank" class="membercard">{{ loop.index }}. {{ item.author }}</a>
+    <a href="{{ item.home }}" target="blank" class="card">
+        <span class="cardindex">{{ loop.index }}. </span>
+        <span class="cardtitle">{{ item.author }}</span>
+        <div class="carddetail">
+            <span class="cardate">Last updated at {{ item.date }}</span>
+        </div>
+    </a>
     {% endfor %}
 </div>
 {% endblock %}
