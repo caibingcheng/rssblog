@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 from flaskext.markdown import Markdown
+from datetime import datetime
+from pytz import timezone
 import time
 import os
 import sys
@@ -23,7 +25,7 @@ ps = generator(ps)
 
 data = {
     'meta': {
-        'updatetime': time.ctime(),
+        'updatetime': datetime.now(tz=timezone('Asia/Shanghai')).isoformat(timespec='seconds'),
     },
     'home': ps['home'],
     'member': ps['member'],
