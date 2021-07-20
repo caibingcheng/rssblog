@@ -28,6 +28,11 @@ if __name__ == '__main__':
     sys.path.append(root_path)
 
     from parser import parser
-    ps = parser()
+    ps = {}
+    ps = parser(ps)
     ps = generator(ps)
-    print(ps['rss'])
+    # print(ps['rss'])
+
+    import sys
+    ps_size = sys.getsizeof(ps)
+    print(ps_size)
