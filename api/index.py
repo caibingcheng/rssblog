@@ -13,6 +13,7 @@ sys.path.append(root_path)
 from utils.generator import generator
 from utils.parser import parser
 from utils.markdown import markdown
+from utils.date import date
 
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
@@ -22,6 +23,7 @@ ps = {}
 ps = markdown(ps, "about", "./templates/about.md")
 ps = parser(ps)
 ps = generator(ps)
+ps = date(ps)
 
 data = {
     'meta': {
@@ -31,26 +33,46 @@ data = {
     'member': ps['member'],
     'rss': ps['rss'],
     'about': ps['about'],
+    'date': ps['date'],
 }
 
 
 @app.route('/')
 def home():
     return render_template('home.html',
-                           data=data,
+                           data=data['home'],
+                           meta=data['meta'],
                            val=int(time.time()))
 
 
 @app.route('/member')
 def member():
     return render_template('member.html',
-                           data=data,
+                           data=data['member'],
+                           meta=data['meta'],
                            val=int(time.time()))
 
 @app.route('/about')
 def about():
     return render_template('about.html',
-                           data=data,
+                           data=data['about'],
+                           meta=data['meta'],
+                           val=int(time.time()))
+
+
+@app.route('/date')
+def date():
+    return render_template('date.html',
+                           data=data['date'],
+                           meta=data['meta'],
+                           val=int(time.time()))
+
+
+@app.route('/date/<y>/<m>')
+def dateym(y, m):
+    return render_template('home.html',
+                           data=data['date'][int(y)][int(m)],
+                           meta=data['meta'],
                            val=int(time.time()))
 
 

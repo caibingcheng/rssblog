@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="grid">
-    {% for item in data.member %}
+    {% for item in data %}
     <a href="{{ item.home }}" target="blank" class="card">
         <span class="cardindex">{{ loop.index }}. </span>
         <span class="cardtitle">{{ item.author }}</span>

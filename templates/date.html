@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="grid">
+    {% for year, month in data.items() %}
+        <div class="date">
+            <span class="year">
+                {{ year }}年
+            </span>
+
+            {% for key, item in month.items() %}
+                <a href="/date/{{ year }}/{{ key }}" class="month {% if item is defined and item|length > 0 %} enable {% else %} disable {% endif %}">
+                    {{ key }}月
+                </a>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

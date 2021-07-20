@@ -254,3 +254,25 @@ article a {
   left: 3.125rem;
   /* background-color: #f8f8f8; */
 }
+
+.grid .date{
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  text-align: center;
+}
+.grid .date .year {
+  margin: 0 1rem;
+}
+.grid .date .month {
+  margin: 0 0.5rem;
+}
+
+.grid .date a{
+  color: rgb(47, 63, 206);
+}
+
+.grid .date a.disable {
+  pointer-events: none;
+  color: #cecece;
+}
