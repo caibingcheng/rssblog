@@ -103,6 +103,7 @@ a {
   justify-content: center;
   flex-wrap: wrap;
   max-width: 800px;
+  min-width: 800px;
   margin-top: 1rem;
 }
 
