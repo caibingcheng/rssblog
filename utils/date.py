@@ -1,7 +1,7 @@
 from datetime import datetime
 
-def date(ps):
-    rl = ps['home']
+def date(ps, inkey=None, outkey=None, locale=True):
+    rl = ps['rssall' if not inkey else inkey]
     date = {}
     for r in rl:
         dt = datetime.strptime(r['date'], '%Y-%m-%d')
@@ -22,6 +22,9 @@ def date(ps):
     for r in rl:
         dt = datetime.strptime(r['date'], '%Y-%m-%d')
         date[dt.year][dt.month].append(r)
-    ps['date'] = date
 
-    return ps
+    if locale:
+        ps['date' if not outkey else outkey] = date
+        return ps
+    else:
+        return date
