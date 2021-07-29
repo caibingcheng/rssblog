@@ -101,6 +101,12 @@ a {
   margin-top: 1rem;
 }
 
+@media (max-width: 800px) {
+  .grid {
+    min-width: 0;
+  }
+}
+
 .card,
 .membercard {
   margin: 0.2rem;
@@ -167,13 +173,6 @@ article a {
 
 .logo {
   height: 1em;
-}
-
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    /* flex-direction: column; */
-  }
 }
 
 .menu {
