@@ -8,7 +8,7 @@
             </span>
 
             {% for key, item in month.items() %}
-                <a href="/date/{{ year }}/{{ key }}" class="month {% if item is defined and item|length > 0 %} enable {% else %} disable {% endif %}">
+                <a href="/{% if id %}{{ id }}/{% endif %}date/{{ year }}/{{ key }}" class="month {% if item is defined and item|length > 0 %} enable {% else %} disable {% endif %}">
                     {{ key }}月
                 </a>
             {% endfor %}

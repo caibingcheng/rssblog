@@ -3,3 +3,4 @@ feedparser
 PyRSS2Gen
 Flask-Markdown
 pytz
+requests

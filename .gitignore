@@ -38,3 +38,6 @@ __pycache__
 
 rss.xml
 screenshot.py
+log
+blogs-original.csv
+loadfromecsv.py

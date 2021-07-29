@@ -1,7 +1,7 @@
 import datetime
 import PyRSS2Gen
 
-def generator(ps):
+def generator(ps, inkey=None, outkey=None, locale=True):
     rss =PyRSS2Gen.RSS2(
         title="RSSBlog",
         link="https://rssblog.cn/",
@@ -14,11 +14,14 @@ def generator(ps):
             author=r['author'],
             # description=r['description'],
             pubDate=datetime.datetime.fromtimestamp(r['tmstamp']),
-        ) for r in ps['home']],
+        ) for r in ps['rssall' if not inkey else inkey]],
     )
-    ps['rss'] = "{}".format(rss.to_xml(encoding='utf-8'))
 
-    return ps
+    if locale:
+        ps['rss' if not outkey else outkey] = "{}".format(rss.to_xml(encoding='utf-8'))
+        return ps
+    else:
+        return "{}".format(rss.to_xml(encoding='utf-8'))
 
 if __name__ == '__main__':
     import time, os, sys
