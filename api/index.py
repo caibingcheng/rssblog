@@ -21,7 +21,7 @@ app = Flask(__name__, static_folder="../static",
 Markdown(app, extensions=['fenced_code'])
 
 ps = {}
-ps = markdown(ps, "about", "./templates/about.md")
+ps = markdown(ps, "about", "./templates/about.md", locale=True)
 ps = parser(ps)
 ps = generator(ps)
 ps = date(ps)

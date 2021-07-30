@@ -2,7 +2,15 @@
 
 RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://github.com/volfclub/travellings](https://github.com/volfclub/travellings) 及 [https://front-end-rss.vercel.app/](https://front-end-rss.vercel.app/)
 
-通过RSSBlog将方便地预览不同博客的标题, 而无需进入不同的博客浏览. RSSBlog使用时间戳排序, 越新的文章将排列在越前.
+### 定位
+
+这是一个值得一直思考的问题.
+
+当初打算写RSSBlog是因为在个人博客添加友链时遇到了一些问题: **被关注的友链, 如何才能比较及时的知道对方有没有更新博文呢?**
+
+或许可以通过爬虫或者其他RSS订阅, 但是最终还是期望把友链的最新内容可以通过博客本站访问到, 所以就搭建了RSSBlog. 所以在最初的版本中, 一直只维护部分友链中的RSS订阅, 再到后来偏移了最初的方向.
+
+最近做了一次更新, 保持原来的url不变, 原始链接依然可以访问所有的订阅. 添加了新的访问方式```/uid/```, 通过uid访问, 可以定制不同的RSS列表. 比如可以将我的博客友链列表做成一个json文件, 然后接入到RSSBlog, 假设uid是bbing, 那么就可以通过[https://rssblog.cn/bbing](https://rssblog.cn/bbing)访问到我定制的RSS列表, 将这个链接接入到个人博客, 就可以比较及时的获取友链更新的情况.
 
 ### 接入规则
 
@@ -19,13 +27,20 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
 如果满足RSSBlog的接入条件, 且期望接入RSSBlog, 需要按照以下格式提交[issue](https://github.com/caibingcheng/rssblog/issues):
 ```
 {
-    link: 'https://yourblog.com/rss.xml',
-    author: 'yourname'
+    "uid" :　"gist json link",
+}
+```
+例如:
+```
+{
+    "bbing": "https://gist.githubusercontent.com/caibingcheng/adf8f300dc50a61a965bdcc6ef0aecb3/raw/friends.json",
 }
 ```
 提交的[issue](https://github.com/caibingcheng/rssblog/issues)将经过人工筛选, 以保证内容干净.
 
 或者直接修改[rss.py](https://github.com/caibingcheng/rssblog/blob/master/utils/rss.py)的PR.
+
+json的格式可以参考[此处](https://gist.githubusercontent.com/caibingcheng/adf8f300dc50a61a965bdcc6ef0aecb3/raw/friends.json).
 
 #### RSS接力
 
@@ -33,10 +48,14 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
 
 您可以在底部或者其他地方接入:
 ```HTML
-<a href="https://rssblog.cn/" target="_blank" rel="noopener" title="RSSBlog">
+<a href="https://rssblog.cn/[uid]" target="_blank" rel="noopener" title="RSSBlog">
     <i class='fas fa-fw fa-inbox'></i>RSSBlog
 </a>
 ```
 ```fa-inbox```看起来像一个盒子, 比较贴近RSS聚合的定义.
 
-有任何问题或者建议欢迎提[issue](https://github.com/caibingcheng/rssblog/issues).
+#### TODOLIST
+
+- [ ] 性能
+- [ ] 存储
+- [ ] 搜索
