@@ -1,143 +1,243 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, url_for, redirect
 from flaskext.markdown import Markdown
 import time
-import os
-import sys
+import random
 
-root_path = os.path.abspath(__file__)
-root_path = '/'.join(root_path.split('/')[:-2])
-sys.path.append(root_path)
-
-from utils.generator import generator
-from utils.parser import parser
+import env
 from utils.markdown import markdown
-from utils.date import date
 from utils.meta import meta
-from utils.friends import fds
-from utils.randrss import randrss
+from utils.fetch import fetch
+from utils.parser import parser
+from utils.generator import generator
+from utils.init import BTACH, URL, SOURCE_BASE
 
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
 Markdown(app, extensions=['fenced_code'])
+md = markdown("./templates/about.md", locale=True)
+meta = meta()
 
-ps = {}
-ps = markdown(ps, "about", "./templates/about.md", locale=True)
-ps = parser(ps)
-ps = generator(ps)
-ps = date(ps)
-ps = meta(ps)
-ps = fds(ps)
 
-data = ps
+def gen_pagination(page, pages):
+    PAGE = 4
+    start, end = page - PAGE, page + PAGE
+    start = 1 if start < 1 else start
+    end = pages if end > pages else end
+    pagination = {
+        "page": page,
+        "pages": int(pages),
+        "has_prev": page > 1,
+        "has_next": page < pages,
+        "start": start,
+        "end": end,
+    }
+    return pagination
 
-## default url
+# default url
+
 
 @app.errorhandler(404)
 def not_found(e):
+    page = random.randint(1, URL["all"])
+    url = (SOURCE_BASE + 'all/{}.csv').format(page)
+    data = parser(fetch(url))
     return render_template('404.html',
-                           data=randrss(data['rssall'], 5),
-                           meta=data['meta'],
+                           data=data,
+                           meta=meta,
                            val=int(time.time())), 404
 
+
 @app.route('/')
-def home():
+def home_default():
+    return home(1)
+
+
+@app.route('/<int:page>/')
+def home(page=1, id=None, max=URL["all"], base_url='all', endpoint='home'):
+    if page > int(max):
+        abort(404)
+    url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
+    data = parser(fetch(url))
     return render_template('home.html',
-                           data=data['rssall'],
-                           meta=data['meta'],
+                           data=data,
+                           meta=meta,
+                           id=id,
+                           pagination=gen_pagination(page, max),
+                           endpoint=endpoint,
                            val=int(time.time()))
 
-@app.route('/member')
-def member():
+
+@app.route('/member/')
+def member_default():
+    return member(1)
+
+
+@app.route('/member/<int:page>/')
+def member(page=1, id=None, max=URL["member"], base_url='member', endpoint='member'):
+    if page > int(max):
+        abort(404)
+    url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
+    data = parser(fetch(url))
     return render_template('member.html',
-                           data=data['member'],
-                           meta=data['meta'],
+                           data=data,
+                           meta=meta,
+                           id=id,
+                           pagination=gen_pagination(page, max),
+                           endpoint=endpoint,
                            val=int(time.time()))
 
-@app.route('/about')
+
+@app.route('/date/')
+def date(data=URL['date'], id=None):
+    return render_template('date.html',
+                           data=data,
+                           meta=meta,
+                           id=id,
+                           val=int(time.time()))
+
+
+@app.route('/date/<int:y>/<int:m>/')
+def date_year_month_default(y, m):
+    return date_year_month(y, m, 1)
+
+
+@app.route('/date/<int:y>/<int:m>/<int:page>/')
+def date_year_month(y, m, page=1, id=None, date=URL["date"], base_url='date', endpoint='date_year_month', kwargs=None):
+    year_ok = None
+    for year in date:
+        if year['year'] == y:
+            year_ok = year
+            break
+    if not year_ok:
+        print("not year ok", y, date)
+        abort(404)
+    is_month_ok = m in year_ok['month'].keys()
+    if not is_month_ok:
+        print("not month ok", m)
+        abort(404)
+    is_page_ok = page <= year_ok['month'][m]
+    if not is_page_ok:
+        print("not page ok", page)
+        abort(404)
+
+    url = (SOURCE_BASE + base_url +
+           '/{0:04d}{1:02d}/{2}.csv').format(y, m, page)
+    data = parser(fetch(url))
+    return render_template('home.html',
+                           data=data,
+                           meta=meta,
+                           id=id,
+                           pagination=gen_pagination(
+                               page, year_ok['month'][m]),
+                           endpoint=endpoint,
+                           kwargs=kwargs if kwargs else {'y': y, 'm': m},
+                           val=int(time.time()))
+
+
+@app.route('/about/')
 def about():
     return render_template('about.html',
-                           data=data['about'],
-                           meta=data['meta'],
+                           data=md,
+                           meta=meta,
                            val=int(time.time()))
+@app.route('/rss/')
+def rss(base_url='all'):
+    url = (SOURCE_BASE + base_url + '/{}.csv').format(1)
+    data = parser(fetch(url))
+    return generator(data), 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 
-@app.route('/date')
-def date():
-    return render_template('date.html',
-                           data=data['date'],
-                           meta=data['meta'],
-                           val=int(time.time()))
+# ### custom url
 
 
-@app.route('/date/<y>/<m>')
-def dateym(y, m):
-    if int(y) not in data['date'].keys() or int(m) not in data['date'][int(y)].keys():
+@app.route('/<id>/')
+def user_home_default(id):
+    return user_home(id, 1)
+
+
+@app.route('/<id>/<int:page>/')
+def user_home(id, page=1):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
         abort(404)
-
-    return render_template('home.html',
-                           data=data['date'][int(y)][int(m)],
-                           meta=data['meta'],
-                           val=int(time.time()))
-
-@app.route('/rss')
-def rss():
-    return data['rss'], 200, {'Content-Type': 'text/xml; charset=utf-8'}
+    return home(page=page,
+                id=id,
+                max=user_ok["all"],
+                base_url='user/' + user_ok['user']+'/all',
+                endpoint='user_home')
 
 
-### custom url
+@app.route('/<id>/member/')
+def user_member_default(id):
+    return user_member(id, 1)
 
-@app.route('/<id>')
-def firends_home(id):
-    if id not in data['friends']:
+
+@app.route('/<id>/member/<int:page>/')
+def user_member(id, page=1):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
         abort(404)
+    return member(page=page,
+                  id=id,
+                  max=user_ok["member"],
+                  base_url='user/' + user_ok['user']+'/member',
+                  endpoint='user_member')
 
-    return render_template('home.html',
-                           data=data['friends'][id],
-                           meta=data['meta'],
+
+@app.route('/<id>/date/')
+def user_date(id):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
+        abort(404)
+    return date(data=user_ok['date'], id=id)
+
+
+@app.route('/<id>/date/<int:y>/<int:m>/')
+def user_date_year_month_default(id, y, m):
+    return user_date_year_month(id, y, m, 1)
+
+
+@app.route('/<id>/date/<int:y>/<int:m>/<int:page>/')
+def user_date_year_month(id, y, m, page=1):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
+        abort(404)
+    return date_year_month(y=y,
+                           m=m,
+                           page=page,
                            id=id,
-                           val=int(time.time()))
+                           date=user_ok["date"],
+                           base_url='user/' + user_ok['user']+'/date',
+                           endpoint='user_date_year_month',
+                           kwargs={'y': y, 'm': m})
 
-@app.route('/<id>/member')
-def firends_member(id):
-    if id not in data['friends-member']:
+@app.route('/<id>/rss/')
+def user_rss(id):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
         abort(404)
+    return rss(base_url='user/' + user_ok['user']+'/all')
 
-    return render_template('member.html',
-                           data=data['friends-member'][id],
-                           meta=data['meta'],
-                           id=id,
-                           val=int(time.time()))
-
-@app.route('/<id>/date')
-def firends_date(id):
-    if id not in data['friends-date']:
-        abort(404)
-
-    return render_template('date.html',
-                           data=data['friends-date'][id],
-                           meta=data['meta'],
-                           id=id,
-                           val=int(time.time()))
-
-
-@app.route('/<id>/date/<y>/<m>')
-def firends_dateym(id, y, m):
-    if id not in data['friends-date']:
-        abort(404)
-    if int(y) not in data['friends-date'][id].keys() or int(m) not in data['friends-date'][id][int(y)].keys():
-        abort(404)
-
-    return render_template('home.html',
-                           data=data['friends-date'][id][int(y)][int(m)],
-                           meta=data['meta'],
-                           id=id,
-                           val=int(time.time()))
-
-@app.route('/<id>/rss')
-def friends_rss(id):
-    if id not in data['friends-rss']:
-        abort(404)
-    return data['friends-rss'][id], 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 if __name__ == '__main__':
     app.run()

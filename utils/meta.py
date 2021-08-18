@@ -2,9 +2,9 @@ from datetime import datetime
 from pytz import timezone
 
 
-def meta(ps):
-    ps['meta'] = {
+def meta():
+    mt = {
         'updatetime': datetime.now(tz=timezone('Asia/Shanghai')).isoformat(timespec='seconds'),
     }
 
-    return ps
+    return mt

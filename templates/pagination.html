@@ -1,0 +1,47 @@
+{% macro pagination_widget(pagination, endpoint) %}
+<ul class="pagination">
+    {% if pagination.has_prev %}
+    <li>
+        <a href={{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}>
+            <<
+        </a>
+    </li>
+    {% endif %}
+
+    {% if pagination.start > 1 %}
+    <li>
+        <a href={{ url_for(endpoint, page = pagination.start - 1, **kwargs) }}>
+            ...
+        </a>
+    </li>
+    {% endif %}
+
+    {% for p in range(pagination.start, pagination.end + 1) %}
+    {% if p == pagination.page %}
+    <li>
+        <a class="active" href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p }}</a>
+    </li>
+    {% else %}
+    <li>
+        <a href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p }}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% if pagination.end < pagination.pages %}
+    <li>
+        <a href={{ url_for(endpoint, page = pagination.end + 1, **kwargs) }}>
+            ...
+        </a>
+    </li>
+    {% endif %}
+
+    {% if pagination.has_next %}
+    <li>
+        <a href={{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}>
+            >>
+        </a>
+    </li>
+    {% endif %}
+</ul>
+{% endmacro %}

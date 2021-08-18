@@ -40,8 +40,6 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
 ```
 提交的[issue](https://github.com/caibingcheng/rssblog/issues)将经过人工筛选, 以保证内容干净.
 
-或者直接修改[rss.py](https://github.com/caibingcheng/rssblog/blob/master/utils/rss.py)的PR.
-
 json的格式可以参考[此处](https://gist.githubusercontent.com/caibingcheng/adf8f300dc50a61a965bdcc6ef0aecb3/raw/friends.json).
 
 #### RSS接力
@@ -58,6 +56,8 @@ json的格式可以参考[此处](https://gist.githubusercontent.com/caibingchen
 
 #### TODOLIST
 
-- [ ] 性能
-- [ ] 存储
 - [ ] 搜索
+
+### UPDATE LIST
+
+- 2021-08-18: 从[RSSBlog-Source](https://github.com/caibingcheng/rssblog-source)获取数据

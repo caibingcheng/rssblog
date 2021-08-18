@@ -282,3 +282,26 @@ article a {
   pointer-events: none;
   color: #cecece;
 }
+
+ul.pagination{
+  padding-inline-start: 0px;
+}
+.pagination li {
+  display: inline;
+  margin: 3rem auto;
+}
+.pagination li a {
+  color: #7a4ba2;
+  text-decoration: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+.pagination li a.active {
+  background-color: aliceblue;
+  color: #acacac;
+  border-radius: 5px;
+}
+.pagination li a:hover:not(.active) {
+  background-color: #cecece;
+  color: #acacac;
+}

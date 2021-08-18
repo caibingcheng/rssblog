@@ -12,4 +12,12 @@
     </a>
     {% endfor %}
 </div>
+{% import "pagination.html" as macros %}
+{% if pagination %}
+{% if kwargs %}
+{{ macros.pagination_widget(pagination, endpoint, id=id, **kwargs) }}
+{% else %}
+{{ macros.pagination_widget(pagination, endpoint, id=id) }}
+{% endif %}
+{% endif %}
 {% endblock %}
