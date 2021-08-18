@@ -203,7 +203,7 @@ article a {
 
 .fixedbox {
   position: fixed;
-  bottom: 8rem;
+  bottom: 10rem;
   right: 25%;
   z-index: 9;
 }
