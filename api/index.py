@@ -2,8 +2,12 @@ from flask import Flask, render_template, abort, url_for, redirect
 from flaskext.markdown import Markdown
 import time
 import random
+import os
+import sys
+root_path = os.path.abspath(__file__)
+root_path = '/'.join(root_path.split('/')[:-2])
+sys.path.append(root_path)
 
-import env
 from utils.markdown import markdown
 from utils.meta import meta
 from utils.fetch import fetch
