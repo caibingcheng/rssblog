@@ -8,12 +8,12 @@ root_path = os.path.abspath(__file__)
 root_path = '/'.join(root_path.split('/')[:-2])
 sys.path.append(root_path)
 
-from utils.markdown import markdown
-from utils.meta import meta
-from utils.fetch import fetch
-from utils.parser import parser
-from utils.generator import generator
 from utils.init import BTACH, URL, SOURCE_BASE
+from utils.generator import generator
+from utils.parser import parser, hash_url
+from utils.fetch import fetch
+from utils.meta import meta
+from utils.markdown import markdown
 
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
@@ -57,8 +57,8 @@ def home_default():
 
 
 @app.route('/<int:page>/')
-def home(page=1, id=None, max=URL["all"], base_url='all', endpoint='home'):
-    if page > int(max):
+def home(page=1, id=None, pages=URL["all"], base_url='all', endpoint='home'):
+    if page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
     data = parser(fetch(url))
@@ -66,7 +66,7 @@ def home(page=1, id=None, max=URL["all"], base_url='all', endpoint='home'):
                            data=data,
                            meta=meta,
                            id=id,
-                           pagination=gen_pagination(page, max),
+                           pagination=gen_pagination(page, pages),
                            endpoint=endpoint,
                            val=int(time.time()))
 
@@ -77,17 +77,41 @@ def member_default():
 
 
 @app.route('/member/<int:page>/')
-def member(page=1, id=None, max=URL["member"], base_url='member', endpoint='member'):
-    if page > int(max):
+def member(page=1, id=None, pages=URL["member"], base_url='member', endpoint='member'):
+    if page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
-    data = parser(fetch(url))
+    data = hash_url(parser(fetch(url)))
     return render_template('member.html',
                            data=data,
                            meta=meta,
                            id=id,
-                           pagination=gen_pagination(page, max),
+                           pagination=gen_pagination(page, pages),
                            endpoint=endpoint,
+                           val=int(time.time()))
+
+
+@app.route('/member/<string:hash_url>/')
+def member_home_default(hash_url, page=1):
+    return member_home(hash_url, page=1)
+
+
+@app.route('/member/<string:hash_url>/<int:page>/')
+def member_home(hash_url, page=1, id=None, base_url='source', endpoint='member_home'):
+    if hash_url not in URL["source"].keys():
+        abort(404)
+    if page > URL["source"][hash_url]:
+        abort(404)
+    url = (SOURCE_BASE + base_url + '/{0}/{1}.csv').format(hash_url, page)
+    data = parser(fetch(url))
+    return render_template('home.html',
+                           data=data,
+                           meta=meta,
+                           id=id,
+                           pagination=gen_pagination(
+                               page, URL["source"][hash_url]),
+                           endpoint=endpoint,
+                           kwargs={'hash_url': hash_url},
                            val=int(time.time()))
 
 
@@ -144,6 +168,8 @@ def about():
                            data=md,
                            meta=meta,
                            val=int(time.time()))
+
+
 @app.route('/rss/')
 def rss(base_url='all'):
     url = (SOURCE_BASE + base_url + '/{}.csv').format(1)
@@ -170,7 +196,7 @@ def user_home(id, page=1):
         abort(404)
     return home(page=page,
                 id=id,
-                max=user_ok["all"],
+                pages=user_ok["all"],
                 base_url='user/' + user_ok['user']+'/all',
                 endpoint='user_home')
 
@@ -191,9 +217,29 @@ def user_member(id, page=1):
         abort(404)
     return member(page=page,
                   id=id,
-                  max=user_ok["member"],
+                  pages=user_ok["member"],
                   base_url='user/' + user_ok['user']+'/member',
                   endpoint='user_member')
+
+
+@app.route('/<id>/member/<string:hash_url>/')
+def user_member_home_default(id, hash_url):
+    return user_member_home(id, hash_url, 1)
+
+
+@app.route('/<id>/member/<string:hash_url>/<int:page>/')
+def user_member_home(id, hash_url, page=1):
+    user_ok = False
+    for user in URL["user"]:
+        if id == user["user"]:
+            user_ok = user
+            break
+    if not user_ok:
+        abort(404)
+    return member_home(page=page,
+                       id=id,
+                       hash_url=hash_url,
+                       endpoint='user_member_home')
 
 
 @app.route('/<id>/date/')
@@ -230,6 +276,7 @@ def user_date_year_month(id, y, m, page=1):
                            base_url='user/' + user_ok['user']+'/date',
                            endpoint='user_date_year_month',
                            kwargs={'y': y, 'm': m})
+
 
 @app.route('/<id>/rss/')
 def user_rss(id):

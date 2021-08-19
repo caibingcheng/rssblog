@@ -2,7 +2,7 @@
 {% block content %}
 <div class="grid">
     {% for item in data %}
-    <a href="{{ item.home }}" target="blank" class="card">
+    <a href="{% if id %}/{{ id }}/{% endif %}/member/{{ item.hash }}" target="blank" class="card">
         <span class="cardindex">{{ loop.index }}. </span>
         <span class="cardtitle">{{ item.author }}</span>
         &nbsp;&nbsp;<i class="fa fa-rss normalink" aria-hidden="true" onclick="javascript:window.open('{{ item.rss }}')"></i>

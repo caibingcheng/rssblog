@@ -6,6 +6,7 @@ SOURCE_JSON = json.loads(requests.get(SOURCE_URL).text)
 BTACH = SOURCE_JSON["batch"]
 URL = SOURCE_JSON["urls"]
 
+
 def init_date(DATE):
     YEAR = []
     for date in DATE:
@@ -16,9 +17,18 @@ def init_date(DATE):
             "year": int(date[0]),
             "month": month,
         })
-    YEAR.sort(key = lambda x: x.get('year', 0), reverse = True)
+    YEAR.sort(key=lambda x: x.get('year', 0), reverse=True)
     return YEAR
 
+
+def init_source(sources):
+    SOURCE = {}
+    for source in sources:
+        SOURCE[source[0]] = source[1]
+    return SOURCE
+
+
+URL["source"] = init_source(URL["source"])
 URL["date"] = init_date(URL["date"])
 for user in URL["user"]:
     user["date"] = init_date(user["date"])
