@@ -172,9 +172,8 @@ def about():
 
 @app.route('/rss/')
 def rss(base_url='all'):
-    url = (SOURCE_BASE + base_url + '/{}.csv').format(1)
-    data = parser(fetch(url))
-    return generator(data), 200, {'Content-Type': 'text/xml; charset=utf-8'}
+    url = SOURCE_BASE + base_url + '/rss.xml'
+    return fetch(url, type="xml"), 200, {'Content-Type': 'text/xml; charset=utf-8'}
 
 
 # ### custom url
