@@ -283,7 +283,7 @@ article a {
   color: #cecece;
 }
 
-ul.pagination{
+ul.pagination {
   padding-inline-start: 0px;
 }
 .pagination li {
@@ -304,4 +304,9 @@ ul.pagination{
 .pagination li a:hover:not(.active) {
   background-color: #cecece;
   color: #acacac;
+}
+@media (max-width: 520px) {
+  .pagination li a {
+    padding: 0.2rem 0.2rem;
+  }
 }

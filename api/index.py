@@ -23,7 +23,7 @@ meta = meta()
 
 
 def gen_pagination(page, pages):
-    PAGE = 4
+    PAGE = 3
     start, end = page - PAGE, page + PAGE
     start = 1 if start < 1 else start
     end = pages if end > pages else end
