@@ -310,3 +310,12 @@ ul.pagination {
     padding: 0.2rem 0.2rem;
   }
 }
+
+.todaynew::before {
+  content: "NEW!";
+  color: red;
+  margin-top: 0.5rem;
+  transform: rotate(30deg);
+  float: right;
+  z-index: 999;
+}

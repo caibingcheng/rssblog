@@ -1,11 +1,14 @@
 from datetime import datetime
 from pytz import timezone
 
-UPTIME = datetime.now(tz=timezone('Asia/Shanghai')).isoformat(timespec='seconds')
+DATE = datetime.now(tz=timezone('Asia/Shanghai'))
+UPTIME = DATE.isoformat(timespec='seconds')
+TODAY = DATE.strftime('%Y-%m-%d')
 
 def meta():
     mt = {
         'updatetime': UPTIME,
+        'today': TODAY
     }
 
     return mt

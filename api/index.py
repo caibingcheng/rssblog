@@ -8,6 +8,7 @@ root_path = os.path.abspath(__file__)
 root_path = '/'.join(root_path.split('/')[:-2])
 sys.path.append(root_path)
 
+
 from utils.init import BTACH, URL, SOURCE_BASE
 from utils.generator import generator
 from utils.parser import parser, hash_url
@@ -36,6 +37,12 @@ def gen_pagination(page, pages):
         "end": end,
     }
     return pagination
+
+
+@app.template_filter("is_today")
+def is_today(date):
+    return meta["today"] == date
+
 
 # default url
 

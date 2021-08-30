@@ -2,7 +2,7 @@
 {% block content %}
 <div class="grid">
     {% for item in data %}
-    <a href="{{ item.link }}" target="blank" class="card">
+    <a href="{{ item.link }}" target="blank" class="card {% if item.date|is_today %}todaynew{% endif %}">
         <span class="cardindex">{{ loop.index }}. </span>
         <span class="cardtitle">{{ item.title }}</span>
         <!-- &nbsp;&nbsp;<i class="fa fa-rss normalink" aria-hidden="true" onclick="javascript:window.open('{{ item.rss }}')"></i> -->
