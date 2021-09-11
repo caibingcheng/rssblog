@@ -2,7 +2,7 @@
 <ul class="pagination">
     {% if pagination.has_prev %}
     <li>
-        <a href={{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}>
+        <a href={{ url_for(endpoint, page = 1, **kwargs) }}>
             <<
         </a>
     </li>
@@ -38,7 +38,7 @@
 
     {% if pagination.has_next %}
     <li>
-        <a href={{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}>
+        <a href={{ url_for(endpoint, page = pagination.pages, **kwargs) }}>
             >>
         </a>
     </li>
