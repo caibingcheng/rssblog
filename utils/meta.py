@@ -7,6 +7,7 @@ TODAY = DATE.strftime('%Y-%m-%d')
 
 def meta():
     mt = {
+        'timestamp': DATE.timestamp(),
         'updatetime': UPTIME,
         'today': TODAY
     }

@@ -44,6 +44,11 @@ def is_today(date):
     return meta["today"] == date
 
 
+@app.template_filter("is_in24h")
+def is_in24h(timestamp):
+    return abs(meta["timestamp"] - timestamp) < 24 * 60 * 60
+
+
 # default url
 
 
