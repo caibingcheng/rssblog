@@ -19,7 +19,7 @@ from utils.markdown import markdown
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
 Markdown(app, extensions=['fenced_code'])
-md = markdown("./templates/about.md", locale=True)
+md = markdown("./README.md", locale=True)
 meta = meta()
 
 

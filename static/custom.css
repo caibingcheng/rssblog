@@ -319,3 +319,7 @@ ul.pagination {
   float: right;
   z-index: 999;
 }
+
+article img{
+  display: none;
+}
