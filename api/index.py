@@ -9,13 +9,14 @@ root_path = '/'.join(root_path.split('/')[:-2])
 sys.path.append(root_path)
 
 
-from utils.init import BTACH, URL, SOURCE_BASE
+from utils.init import RssblogSouce, SOURCE_BASE
 from utils.generator import generator
 from utils.parser import parser, hash_url
 from utils.fetch import fetch
 from utils.meta import meta
 from utils.markdown import markdown
 
+rs = RssblogSouce()
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
 Markdown(app, extensions=['fenced_code'])
@@ -54,7 +55,7 @@ def is_in24h(timestamp):
 
 @app.errorhandler(404)
 def not_found(e):
-    page = random.randint(1, URL["all"])
+    page = random.randint(1, rs.url["all"])
     url = (SOURCE_BASE + 'all/{}.csv').format(page)
     data = parser(fetch(url))
     return render_template('404.html',
@@ -69,7 +70,7 @@ def home_default():
 
 
 @app.route('/<int:page>/')
-def home(page=1, id=None, pages=URL["all"], base_url='all', endpoint='home'):
+def home(page=1, id=None, pages=rs.url["all"], base_url='all', endpoint='home'):
     if page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
@@ -89,7 +90,7 @@ def member_default():
 
 
 @app.route('/member/<int:page>/')
-def member(page=1, id=None, pages=URL["member"], base_url='member', endpoint='member'):
+def member(page=1, id=None, pages=rs.url["member"], base_url='member', endpoint='member'):
     if page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
@@ -110,9 +111,9 @@ def member_home_default(hash_url, page=1):
 
 @app.route('/member/<string:hash_url>/<int:page>/')
 def member_home(hash_url, page=1, id=None, base_url='source', endpoint='member_home'):
-    if hash_url not in URL["source"].keys():
+    if hash_url not in rs.url["source"].keys():
         abort(404)
-    if page > URL["source"][hash_url]:
+    if page > rs.url["source"][hash_url]:
         abort(404)
     url = (SOURCE_BASE + base_url + '/{0}/{1}.csv').format(hash_url, page)
     data = parser(fetch(url))
@@ -121,14 +122,14 @@ def member_home(hash_url, page=1, id=None, base_url='source', endpoint='member_h
                            meta=meta,
                            id=id,
                            pagination=gen_pagination(
-                               page, URL["source"][hash_url]),
+                               page, rs.url["source"][hash_url]),
                            endpoint=endpoint,
                            kwargs={'hash_url': hash_url},
                            val=int(time.time()))
 
 
 @app.route('/date/')
-def date(data=URL['date'], id=None):
+def date(data=rs.url['date'], id=None):
     return render_template('date.html',
                            data=data,
                            meta=meta,
@@ -142,7 +143,7 @@ def date_year_month_default(y, m):
 
 
 @app.route('/date/<int:y>/<int:m>/<int:page>/')
-def date_year_month(y, m, page=1, id=None, date=URL["date"], base_url='date', endpoint='date_year_month', kwargs=None):
+def date_year_month(y, m, page=1, id=None, date=rs.url["date"], base_url='date', endpoint='date_year_month', kwargs=None):
     year_ok = None
     for year in date:
         if year['year'] == y:
@@ -199,7 +200,7 @@ def user_home_default(id):
 @app.route('/<id>/<int:page>/')
 def user_home(id, page=1):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break
@@ -220,7 +221,7 @@ def user_member_default(id):
 @app.route('/<id>/member/<int:page>/')
 def user_member(id, page=1):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break
@@ -241,7 +242,7 @@ def user_member_home_default(id, hash_url):
 @app.route('/<id>/member/<string:hash_url>/<int:page>/')
 def user_member_home(id, hash_url, page=1):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break
@@ -256,7 +257,7 @@ def user_member_home(id, hash_url, page=1):
 @app.route('/<id>/date/')
 def user_date(id):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break
@@ -273,7 +274,7 @@ def user_date_year_month_default(id, y, m):
 @app.route('/<id>/date/<int:y>/<int:m>/<int:page>/')
 def user_date_year_month(id, y, m, page=1):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break
@@ -292,7 +293,7 @@ def user_date_year_month(id, y, m, page=1):
 @app.route('/<id>/rss/')
 def user_rss(id):
     user_ok = False
-    for user in URL["user"]:
+    for user in rs.url["user"]:
         if id == user["user"]:
             user_ok = user
             break

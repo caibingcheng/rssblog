@@ -3,10 +3,10 @@
     <main class="main">
         {% include "title.html" %}
         <p class="updatetime">
-            Last updated at {{ meta.updatetime }}
+            Last setup at {{ meta.updatetime }}
         </p>
         <p class="updatetime">
-            update policy 0 0,12,18 * * * *
+            update policy 0 */3 * * * *
         </p>
         {% block content %}{% endblock %}
     </main>
