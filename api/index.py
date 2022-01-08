@@ -9,14 +9,14 @@ root_path = '/'.join(root_path.split('/')[:-2])
 sys.path.append(root_path)
 
 
-from utils.init import RssblogSouce, SOURCE_BASE
+from utils.init import RssblogSource, SOURCE_BASE
 from utils.generator import generator
 from utils.parser import parser, hash_url
 from utils.fetch import fetch
 from utils.meta import meta
 from utils.markdown import markdown
 
-rs = RssblogSouce()
+rs = RssblogSource()
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
 Markdown(app, extensions=['fenced_code'])
@@ -187,6 +187,12 @@ def about():
 def rss(base_url='all'):
     url = SOURCE_BASE + base_url + '/rss.xml'
     return fetch(url, type="xml"), 200, {'Content-Type': 'text/xml; charset=utf-8'}
+
+
+@app.route('/immediate/')
+def immediate():
+    rs.immediate()
+    return 200
 
 
 # ### custom url
