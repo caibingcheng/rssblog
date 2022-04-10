@@ -7,7 +7,7 @@ SOURCE_BASE = "https://raw.githubusercontent.com/caibingcheng/rssblog-source/pub
 SOURCE_URL = SOURCE_BASE + "stats.min.json"
 
 
-class RssblogSouce(object):
+class RssblogSource(object):
     def __init__(self):
         self._bc = buffercache.BufferCache(timeout=1000*60*60*3).set_getter(self._update)
 
@@ -43,6 +43,9 @@ class RssblogSouce(object):
         for source in sources:
             source_mp[source[0]] = source[1]
         return source_mp
+
+    def immediate(self):
+        self._bc.immediate()
 
     @property
     def url(self):
