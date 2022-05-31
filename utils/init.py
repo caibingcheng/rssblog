@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import buffercache
+# SOURCE_BASE = "https://gitee.com/caibingcheng/rssblog-source/raw/public/"
 SOURCE_BASE = "https://raw.githubusercontent.com/caibingcheng/rssblog-source/public/"
 SOURCE_URL = SOURCE_BASE + "stats.min.json"
 

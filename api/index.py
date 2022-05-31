@@ -177,6 +177,7 @@ def date_year_month(y, m, page=1, id=None, date=rs.url["date"], base_url='date',
 
 @app.route('/about/')
 def about():
+    abort(404)
     return render_template('about.html',
                            data=md,
                            meta=meta,
