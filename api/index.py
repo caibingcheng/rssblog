@@ -1,20 +1,15 @@
-from flask import Flask, render_template, abort, url_for, redirect
+from flask import Flask, render_template, abort, request, url_for, redirect
 from flaskext.markdown import Markdown
 import time
 import random
-import os
-import sys
-root_path = os.path.abspath(__file__)
-root_path = '/'.join(root_path.split('/')[:-2])
-sys.path.append(root_path)
+import json
 
-
-from utils.init import RssblogSource, SOURCE_BASE
-from utils.generator import generator
-from utils.parser import parser, hash_url
-from utils.fetch import fetch
-from utils.meta import meta
 from utils.markdown import markdown
+from utils.meta import meta
+from utils.fetch import fetch
+from utils.parser import parser, hash_url
+from utils.generator import generator
+from utils.init import RssblogSource, SOURCE_BASE
 
 rs = RssblogSource()
 app = Flask(__name__, static_folder="../static",
@@ -54,11 +49,12 @@ def is_in24h(timestamp):
 
 
 @app.errorhandler(404)
-def not_found(e):
+def not_found(id):
     page = random.randint(1, rs.url["all"])
     url = (SOURCE_BASE + 'all/{}.csv').format(page)
     data = parser(fetch(url))
     return render_template('404.html',
+                           id=id,
                            data=data,
                            meta=meta,
                            val=int(time.time())), 404
@@ -75,6 +71,12 @@ def home(page=1, id=None, pages=rs.url["all"], base_url='all', endpoint='home'):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
     data = parser(fetch(url))
+
+    method = request.args.get("method")
+    method = "html" if not method else method
+    if method == "raw":
+        return json.dumps(data, ensure_ascii=False).encode('utf8')
+
     return render_template('home.html',
                            data=data,
                            meta=meta,
@@ -212,7 +214,7 @@ def user_home(id, page=1):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return home(page=page,
                 id=id,
                 pages=user_ok["all"],
@@ -233,7 +235,7 @@ def user_member(id, page=1):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return member(page=page,
                   id=id,
                   pages=user_ok["member"],
@@ -254,7 +256,7 @@ def user_member_home(id, hash_url, page=1):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return member_home(page=page,
                        id=id,
                        hash_url=hash_url,
@@ -269,7 +271,7 @@ def user_date(id):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return date(data=user_ok['date'], id=id)
 
 
@@ -286,7 +288,7 @@ def user_date_year_month(id, y, m, page=1):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return date_year_month(y=y,
                            m=m,
                            page=page,
@@ -305,7 +307,7 @@ def user_rss(id):
             user_ok = user
             break
     if not user_ok:
-        abort(404)
+        abort(404, id)
     return rss(base_url='user/' + user_ok['user']+'/all')
 
 
