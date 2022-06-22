@@ -41,3 +41,5 @@ screenshot.py
 log
 blogs-original.csv
 loadfromecsv.py
+
+/api/utils*
