@@ -9,12 +9,12 @@ root_path = os.path.abspath(__file__)
 root_path = '/'.join(root_path.split('/')[:-2])
 sys.path.append(root_path)
 
-from utils.markdown import markdown
-from utils.meta import meta
-from utils.fetch import fetch
-from utils.parser import parser, hash_url
-from utils.generator import generator
 from utils.init import RssblogSource, SOURCE_BASE
+from utils.generator import generator
+from utils.parser import parser, hash_url
+from utils.fetch import fetch
+from utils.meta import meta
+from utils.markdown import markdown
 
 rs = RssblogSource()
 app = Flask(__name__, static_folder="../static",
@@ -77,10 +77,12 @@ def home(page=1, id=None, pages=rs.url["all"], base_url='all', endpoint='home'):
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
     data = parser(fetch(url))
 
-    method = request.args.get("method")
+    args = request.args
+    method = args.get("method")
     method = "html" if not method else method
     if method == "raw":
-        return json.dumps(data, ensure_ascii=False).encode('utf8')
+        raw_data = json.dumps(data, ensure_ascii=False)
+        return "{}({})".format(args.get("jsoncallback"), raw_data) if "jsoncallback" in args.keys() else raw_data.encode('utf8')
 
     return render_template('home.html',
                            data=data,
