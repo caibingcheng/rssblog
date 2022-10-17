@@ -53,11 +53,3 @@ json的格式可以参考[此处](https://gist.githubusercontent.com/caibingchen
 </a>
 ```
 ```fa-inbox```看起来像一个盒子, 比较贴近RSS聚合的定义.
-
-#### TODOLIST
-
-- [ ] 搜索
-
-### UPDATE LIST
-
-- 2021-08-18: 从[RSSBlog-Source](https://github.com/caibingcheng/rssblog-source)获取数据
