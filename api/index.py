@@ -124,8 +124,34 @@ def member_home(hash_url, page=1, id=None, base_url='source', endpoint='member_h
         abort(404)
     if page > rs.url["source"][hash_url]:
         abort(404)
-    url = (SOURCE_BASE + base_url + '/{0}/{1}.csv').format(hash_url, page)
-    data = parser(fetch(url))
+
+    data = []
+    args = request.args
+    sample = args.get("sample")
+    sample = False if not sample else True
+    method = args.get("method")
+    method = "html" if not method else method
+    count = args.get("count")
+    try:
+        count = -1 if not count else int(count)
+    except:
+        abort(404)
+
+    if not sample:
+        url = (SOURCE_BASE + base_url + '/{0}/{1}.csv').format(hash_url, page)
+        data = parser(fetch(url))
+    else:
+        page = random.randint(1, rs.url["source"][hash_url])
+        url = (SOURCE_BASE + base_url + '/{0}/{1}.csv').format(hash_url, page)
+        data = parser(fetch(url))
+
+    if count > 0:
+        data = random.sample(data, min(count, len(data)))
+
+    if method == "raw":
+        raw_data = json.dumps(data, ensure_ascii=False)
+        return "{}({})".format(args.get("jsoncallback"), raw_data) if "jsoncallback" in args.keys() else raw_data.encode('utf8')
+
     return render_template('home.html',
                            data=data,
                            meta=meta,
