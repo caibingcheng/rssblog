@@ -26,7 +26,7 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
 
 #### 提交issue
 
-如果满足RSSBlog的接入条件, 且期望接入RSSBlog, 需要按照以下格式提交[issue](https://github.com/caibingcheng/rssblog/issues):
+如果满足RSSBlog的接入条件, 且期望自定义订阅列表, 需要按照以下格式提交[issue](https://github.com/caibingcheng/rssblog/issues):
 ```
 {
     "uid" :　"gist json link",
@@ -38,9 +38,18 @@ RSSBlog 是一个基于RSS的博客内容聚合站. 想法来源: [https://githu
     "bbing": "https://gist.githubusercontent.com/caibingcheng/adf8f300dc50a61a965bdcc6ef0aecb3/raw/friends.json",
 }
 ```
-提交的[issue](https://github.com/caibingcheng/rssblog/issues)将经过人工筛选, 以保证内容干净.
-
 json的格式可以参考[此处](https://gist.githubusercontent.com/caibingcheng/adf8f300dc50a61a965bdcc6ef0aecb3/raw/friends.json).
+
+如果**不需要**定制个人的分类，只期望在rssblog列表显示，则按以下格式提交[issue](https://github.com/caibingcheng/rssblog/issues)即可:
+```
+"your rss/feed link"
+```
+例如:
+```
+"https://bbing.com.cn/index.xml"
+```
+
+提交的[issue](https://github.com/caibingcheng/rssblog/issues)将经过人工筛选, 以保证内容干净.
 
 #### RSS接力
 
