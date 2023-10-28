@@ -16,12 +16,23 @@ from utils.fetch import fetch
 from utils.meta import meta
 from utils.markdown import markdown
 
+print("init rssblog source")
 rs = RssblogSource()
+print("init rssblog source done")
+
+print("init flask")
 app = Flask(__name__, static_folder="../static",
             template_folder="../templates")
+print("init flask done")
+
+print("init markdown")
 Markdown(app, extensions=['fenced_code'])
 md = markdown("./README.md", locale=True)
+print("init markdown done")
+
+print("init meta")
 meta = meta()
+print("init meta done")
 
 
 def gen_pagination(page, pages):
