@@ -1,8 +1,8 @@
-Flask==2.3.2
-PyRSS2Gen==1.1
-Flask-Markdown==0.3
-pytz==2022.1
-requests==2.31.0
-pandas==2.0.3
-buffercache==1.0.2
-Werkzeug==2.3.6
+Flask==2.3.3
+PyRSS2Gen
+Flask-Markdown
+pytz
+requests
+pandas
+buffercache
+Werkzeug
