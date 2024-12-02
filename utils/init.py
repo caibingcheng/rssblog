@@ -13,7 +13,11 @@ class RssblogSource(object):
         self._bc = buffercache.BufferCache(timeout=1000*60*60*3).set_getter(self._update)
 
     def _update(self):
-        self._source_json = json.loads(requests.get(SOURCE_URL).text)
+        raw = requests.get(SOURCE_URL)
+        print(f"get source {raw.status_code} from {SOURCE_URL}")
+        if raw.status_code != 200:
+            raise Exception("get source error")
+        self._source_json = json.loads(raw.text)
         print("[{}] update rssblog source".format(os.getpid()), time.time())
         self._batch = self._source_json["batch"]
         self._url = self._source_json["urls"]
