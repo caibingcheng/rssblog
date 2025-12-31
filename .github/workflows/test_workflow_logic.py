@@ -18,12 +18,16 @@ def should_trigger_workflow(comment_author, repository_owner, comment_body):
       github.event.comment.user.login == github.repository_owner &&
       (contains(github.event.comment.body, 'ADD') || 
       contains(github.event.comment.body, 'DELETE'))
+    
+    Note: The workflow uses contains() which is a simple substring check (like Python's 'in').
+    The actual command parsing with regex happens later in the Python script.
     """
     # Check if comment author is the repository owner
     if comment_author != repository_owner:
         return False
     
     # Check if comment contains ADD or DELETE command
+    # Using 'in' operator to match GitHub's contains() function behavior
     has_add = 'ADD' in comment_body
     has_delete = 'DELETE' in comment_body
     
