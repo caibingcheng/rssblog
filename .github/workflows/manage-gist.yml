@@ -10,10 +10,10 @@ jobs:
     permissions:
       issues: write  # Required to post comments on issues
       contents: read  # Required to checkout repository
-    # Only run if the comment contains ADD or DELETE command as standalone words
+    # Only run if the comment contains ADD or DELETE command
     if: |
-      github.event.comment.body =~ '.*\bADD\b.*' || 
-      github.event.comment.body =~ '.*\bDELETE\b.*'
+      contains(github.event.comment.body, 'ADD') || 
+      contains(github.event.comment.body, 'DELETE')
     
     steps:
       - name: Checkout repository
