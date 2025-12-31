@@ -52,9 +52,11 @@ jobs:
                   return 200 <= response.status_code < 300
               except requests.exceptions.RequestException:
                   try:
-                      response = requests.get(url, timeout=10, allow_redirects=True)
-                      # Only consider 2xx status codes as truly accessible
-                      return 200 <= response.status_code < 300
+                      response = requests.get(url, timeout=10, allow_redirects=True, stream=True)
+                      # Only consider 2xx status codes as truly accessible, without downloading the full body
+                      status_code = response.status_code
+                      response.close()
+                      return 200 <= status_code < 300
                   except requests.exceptions.RequestException:
                       return False
 
