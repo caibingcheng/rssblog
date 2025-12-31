@@ -95,7 +95,19 @@ jobs:
                   }
               }
               response = requests.patch(url, headers=headers, json=data)
-              return response.status_code == 200
+              if response.status_code != 200:
+                  # Log detailed error information to help diagnose failures
+                  try:
+                      error_detail = response.json()
+                  except ValueError:
+                      error_detail = response.text
+                  print(
+                      f"Error: Failed to update gist {gist_id}. "
+                      f"Status: {response.status_code}, Response: {error_detail}",
+                      file=sys.stderr,
+                  )
+                  return False
+              return True
 
           def post_comment(repo, issue_number, message, token):
               """Post a comment to the issue"""
