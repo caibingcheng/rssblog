@@ -10,7 +10,11 @@ import re
 import json
 
 def parse_command(comment_body):
-    """Parse ADD or DELETE command from comment"""
+    """Parse ADD or DELETE command from comment.
+
+    Returns a tuple of (command, section, url), or (None, None, None) if
+    no valid command is found.
+    """
     add_pattern = r'ADD\s+(\S+)\s+(\S+)'
     delete_pattern = r'DELETE\s+(\S+)\s+(\S+)'
     
