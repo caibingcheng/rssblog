@@ -1,0 +1,194 @@
+name: Manage Gist from Issue Comments
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  manage-gist:
+    runs-on: ubuntu-latest
+    # Only run if the comment contains ADD or DELETE command
+    if: |
+      contains(github.event.comment.body, 'ADD ') || 
+      contains(github.event.comment.body, 'DELETE ')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Process comment command
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: adf8f300dc50a61a965bdcc6ef0aecb3
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO_FULL_NAME: ${{ github.repository }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+          import json
+          import requests
+          import sys
+
+          def check_url_accessible(url):
+              """Check if URL is accessible"""
+              try:
+                  response = requests.head(url, timeout=10, allow_redirects=True)
+                  return response.status_code < 400
+              except:
+                  try:
+                      response = requests.get(url, timeout=10, allow_redirects=True)
+                      return response.status_code < 400
+                  except:
+                      return False
+
+          def get_gist_file(gist_id, filename, token):
+              """Fetch gist file content"""
+              url = f"https://api.github.com/gists/{gist_id}"
+              headers = {
+                  "Authorization": f"token {token}",
+                  "Accept": "application/vnd.github.v3+json"
+              }
+              response = requests.get(url, headers=headers)
+              if response.status_code != 200:
+                  return None
+              
+              gist_data = response.json()
+              if filename in gist_data.get('files', {}):
+                  content = gist_data['files'][filename]['content']
+                  try:
+                      return json.loads(content)
+                  except:
+                      return []
+              return []
+
+          def update_gist_file(gist_id, filename, content, token):
+              """Update gist file content"""
+              url = f"https://api.github.com/gists/{gist_id}"
+              headers = {
+                  "Authorization": f"token {token}",
+                  "Accept": "application/vnd.github.v3+json"
+              }
+              data = {
+                  "files": {
+                      filename: {
+                          "content": json.dumps(content, indent=2, ensure_ascii=False)
+                      }
+                  }
+              }
+              response = requests.patch(url, headers=headers, json=data)
+              return response.status_code == 200
+
+          def post_comment(repo, issue_number, message, token):
+              """Post a comment to the issue"""
+              url = f"https://api.github.com/repos/{repo}/issues/{issue_number}/comments"
+              headers = {
+                  "Authorization": f"token {token}",
+                  "Accept": "application/vnd.github.v3+json"
+              }
+              data = {"body": message}
+              requests.post(url, headers=headers, json=data)
+
+          # Get environment variables
+          gist_token = os.environ.get('GIST_TOKEN')
+          github_token = os.environ.get('GITHUB_TOKEN')
+          gist_id = os.environ.get('GIST_ID')
+          comment_body = os.environ.get('COMMENT_BODY', '')
+          issue_number = os.environ.get('ISSUE_NUMBER')
+          repo = os.environ.get('REPO_FULL_NAME')
+
+          if not gist_token:
+              print("Error: GIST_TOKEN secret not found")
+              sys.exit(1)
+
+          # Parse comment for ADD or DELETE commands
+          # Format: ADD <section> <URL> or DELETE <section> <URL>
+          add_pattern = r'ADD\s+(\S+)\s+(\S+)'
+          delete_pattern = r'DELETE\s+(\S+)\s+(\S+)'
+
+          add_match = re.search(add_pattern, comment_body)
+          delete_match = re.search(delete_pattern, comment_body)
+
+          if add_match:
+              section = add_match.group(1)
+              url = add_match.group(2)
+              filename = f"{section}.json"
+              
+              print(f"Processing ADD command: section={section}, url={url}")
+              
+              # Check if URL is accessible
+              if not check_url_accessible(url):
+                  message = f"❌ URL is not accessible: {url}"
+                  print(message)
+                  post_comment(repo, issue_number, message, github_token)
+                  sys.exit(1)
+              
+              # Get current gist content
+              current_data = get_gist_file(gist_id, filename, gist_token)
+              if current_data is None:
+                  current_data = []
+              
+              # Add URL if not already present
+              if url not in current_data:
+                  current_data.append(url)
+                  
+                  # Update gist
+                  if update_gist_file(gist_id, filename, current_data, gist_token):
+                      message = f"✅ Successfully added `{url}` to `{section}.json`"
+                      print(message)
+                      post_comment(repo, issue_number, message, github_token)
+                  else:
+                      message = f"❌ Failed to update gist file `{section}.json`"
+                      print(message)
+                      post_comment(repo, issue_number, message, github_token)
+                      sys.exit(1)
+              else:
+                  message = f"ℹ️ URL `{url}` already exists in `{section}.json`"
+                  print(message)
+                  post_comment(repo, issue_number, message, github_token)
+
+          elif delete_match:
+              section = delete_match.group(1)
+              url = delete_match.group(2)
+              filename = f"{section}.json"
+              
+              print(f"Processing DELETE command: section={section}, url={url}")
+              
+              # Get current gist content
+              current_data = get_gist_file(gist_id, filename, gist_token)
+              if current_data is None:
+                  current_data = []
+              
+              # Remove URL if present
+              if url in current_data:
+                  current_data.remove(url)
+                  
+                  # Update gist
+                  if update_gist_file(gist_id, filename, current_data, gist_token):
+                      message = f"✅ Successfully removed `{url}` from `{section}.json`"
+                      print(message)
+                      post_comment(repo, issue_number, message, github_token)
+                  else:
+                      message = f"❌ Failed to update gist file `{section}.json`"
+                      print(message)
+                      post_comment(repo, issue_number, message, github_token)
+                      sys.exit(1)
+              else:
+                  message = f"ℹ️ URL `{url}` not found in `{section}.json`"
+                  print(message)
+                  post_comment(repo, issue_number, message, github_token)
+          else:
+              print("No valid ADD or DELETE command found")
+
+          EOF
