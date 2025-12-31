@@ -54,6 +54,7 @@ The workflow automatically uses the `GITHUB_TOKEN` provided by GitHub Actions to
 ### Workflow Behavior
 
 - The workflow triggers on issue comments (when a comment is created)
+- **Security**: It only runs if the comment author is the repository owner (caibingcheng)
 - It only runs if the comment contains "ADD " or "DELETE " commands
 - After processing, it posts a comment with the result:
   - ✅ Success message if the operation completed

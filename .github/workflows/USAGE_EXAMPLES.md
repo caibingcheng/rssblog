@@ -109,12 +109,14 @@ For example:
 
 The workflow only runs when:
 1. A comment is created on an issue
-2. The comment contains "ADD " or "DELETE " (with space after the keyword)
+2. **The comment author is the repository owner (caibingcheng)**
+3. The comment contains "ADD " or "DELETE " (with space after the keyword)
 
-This prevents accidental triggers from words like "ADDON" or "DELETED" in regular comments.
+This prevents accidental triggers from words like "ADDON" or "DELETED" in regular comments, and ensures only the repository owner can modify the gist.
 
 ## Security Features
 
+- ✅ **Owner-only access**: Only the repository owner (caibingcheng) can trigger the workflow
 - ✅ Uses Bearer token authentication (modern standard)
 - ✅ Explicit permission grants (issues: write, contents: read)
 - ✅ Specific exception handling for network errors
@@ -126,6 +128,7 @@ This prevents accidental triggers from words like "ADDON" or "DELETED" in regula
 ## Troubleshooting
 
 ### Workflow doesn't trigger
+- **Verify you are the repository owner (caibingcheng)** - only the owner can trigger this workflow
 - Check that your comment contains "ADD " or "DELETE " (with space)
 - Verify you're commenting on an issue, not a pull request
 
