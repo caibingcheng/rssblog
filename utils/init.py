@@ -33,13 +33,18 @@ class RssblogSource(object):
     def _date(date_ls):
         year = []
         for date in date_ls:
-            month = {}
-            for m in date[1]:
-                month[int(m[0])] = int(m[1])
-            year.append({
-                "year": int(date[0]),
-                "month": month,
-            })
+            try:
+                month = {}
+                for m in date[1]:
+                    month[int(m[0])] = int(m[1])
+                year.append({
+                    "year": int(date[0]),
+                    "month": month,
+                })
+            except (ValueError, TypeError, IndexError) as e:
+                # Skip malformed date entries
+                print(f"Warning: Skipping malformed date entry: {date}, error: {e}")
+                continue
         year.sort(key=lambda x: x.get('year', 0), reverse=True)
         return year
 
