@@ -7,6 +7,9 @@ on:
 jobs:
   manage-gist:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write  # Required to post comments on issues
+      contents: read  # Required to checkout repository
     # Only run if the comment contains ADD or DELETE command with word boundaries
     if: |
       contains(github.event.comment.body, 'ADD ') || 
