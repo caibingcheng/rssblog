@@ -7,7 +7,7 @@ on:
 jobs:
   manage-gist:
     runs-on: ubuntu-latest
-    # Only run if the comment contains ADD or DELETE command
+    # Only run if the comment contains ADD or DELETE command with word boundaries
     if: |
       contains(github.event.comment.body, 'ADD ') || 
       contains(github.event.comment.body, 'DELETE ')
@@ -45,11 +45,13 @@ jobs:
               """Check if URL is accessible"""
               try:
                   response = requests.head(url, timeout=10, allow_redirects=True)
-                  return response.status_code < 400
+                  # Only consider 2xx status codes as truly accessible
+                  return 200 <= response.status_code < 300
               except requests.exceptions.RequestException:
                   try:
                       response = requests.get(url, timeout=10, allow_redirects=True)
-                      return response.status_code < 400
+                      # Only consider 2xx status codes as truly accessible
+                      return 200 <= response.status_code < 300
                   except requests.exceptions.RequestException:
                       return False
 
@@ -110,8 +112,18 @@ jobs:
           issue_number = os.environ.get('ISSUE_NUMBER')
           repo = os.environ.get('REPO_FULL_NAME')
 
+          # Validate required environment variables
           if not gist_token:
               print("Error: GIST_TOKEN secret not found")
+              sys.exit(1)
+          if not github_token:
+              print("Error: GITHUB_TOKEN not found")
+              sys.exit(1)
+          if not gist_id:
+              print("Error: GIST_ID not configured")
+              sys.exit(1)
+          if not issue_number or not repo:
+              print("Error: Issue context not available")
               sys.exit(1)
 
           # Parse comment for ADD or DELETE commands
