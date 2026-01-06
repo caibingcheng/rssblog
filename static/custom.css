@@ -15,6 +15,58 @@ a {
   box-sizing: border-box;
 }
 
+.notice-bar {
+  background-color: #fff3cd;
+  border-bottom: 1px solid #ffc107;
+  padding: 10px 20px;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.notice-bar.hidden {
+  display: none;
+}
+
+.notice-bar p {
+  margin: 0;
+  color: #856404;
+  font-size: 14px;
+  padding-right: 30px;
+}
+
+.notice-bar a {
+  color: #0066cc;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.notice-bar a:hover {
+  color: #004499;
+}
+
+.notice-close {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #856404;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.notice-close:hover {
+  color: #533f03;
+}
+
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
