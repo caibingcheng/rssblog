@@ -14,5 +14,6 @@ def parser(df):
 
 def hash_url(urls):
     for url in urls:
-        url["hash"] = hash(url["rss"].strip(" ").strip("/"))
+        rss_hash = url.get("rss_hash")
+        url["hash"] = rss_hash if rss_hash else hash(url["rss"].strip(" ").strip("/"))
     return urls
