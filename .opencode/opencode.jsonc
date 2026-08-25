@@ -1,0 +1,8 @@
+{
+  "references": {
+    "my-opencode": {
+      "path": "../../rssblog-source/",
+      "description": "RSSBlog数据仓库"
+    }
+  }
+}

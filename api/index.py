@@ -83,7 +83,7 @@ def home_default():
 
 @app.route('/<int:page>/')
 def home(page=1, id=None, pages=rs.url["all"], base_url='all', endpoint='home'):
-    if page > int(pages):
+    if page < 1 or page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
     data = parser(fetch(url))
@@ -111,7 +111,7 @@ def member_default():
 
 @app.route('/member/<int:page>/')
 def member(page=1, id=None, pages=rs.url["member"], base_url='member', endpoint='member'):
-    if page > int(pages):
+    if page < 1 or page > int(pages):
         abort(404)
     url = (SOURCE_BASE + base_url + '/{}.csv').format(page)
     data = hash_url(parser(fetch(url)))
@@ -133,7 +133,8 @@ def member_home_default(hash_url, page=1):
 def member_home(hash_url, page=1, id=None, base_url='source', endpoint='member_home'):
     if hash_url not in rs.url["source"].keys():
         abort(404)
-    if page > rs.url["source"][hash_url]:
+    pages = rs.url["source"][hash_url]
+    if page < 1 or page > pages:
         abort(404)
 
     data = []
